@@ -1,6 +1,8 @@
-# password_analysis_scripts
-A collection of scripts analyzing mask and character frequency:
+# Password Scripts
+## A collection of scripts for mangling and analysis:
 
-mask_finder.py - Analyzes a password list to find frequency of password character masks
+### mask_finder.py
+Analyzes a password list to find frequency of password character masks
 
-positional_character_frequency.py - Analyzes a password list to find frequency of characters per position
+### positional_character_frequency.py
+Analyzes a password list to find frequency of characters per position

@@ -7,5 +7,5 @@
 ### positional_character_frequency.py
 > Analyzes a password list to find frequency of characters per position
 
-### mangler.py
+### password_mangler.py
 > Mangles a wordlist in various ways specified by the user

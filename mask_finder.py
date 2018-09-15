@@ -4,7 +4,7 @@
 __author__ = 'Jake Miller (@LaconicWolf)'
 __date__ = '20180914'
 __version__ = '0.02'
-__description__ = """Reads in one or more plain-text password lists to find the frequency 
+__description__ = """Reads in a plain-text password lists to find the frequency 
 of password character masks. Will display all character masks found"""
 
 
@@ -64,6 +64,9 @@ def arrange_words_by_length(list_of_words):
 
 
 def main():
+    """Reads in a plain-text password lists to find the frequency 
+    of password character masks. Will display all character masks found.
+    """
     # Read the file into memory.
     words = open(filename).read().splitlines()
 

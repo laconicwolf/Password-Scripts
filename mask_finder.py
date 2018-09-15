@@ -55,13 +55,51 @@ def sort_char_masks(mask_list):
     return sorted_mask_dict
 
 
+def arrange_words_by_length(list_of_words):
+    """Takes a list of words and returns a list of multiple lists
+    arranged by the word length.
+    """
+    list_of_words.sort(key=len)
+    return list_of_words
+
+
 def main():
-    for filename in args.filename:
-        words = open(filename).read().splitlines()
-        masks = [generate_char_mask(word) for word in words]
+    # Read the file into memory.
+    words = open(filename).read().splitlines()
+
+    # Sort the words by length.
+    sorted_words = arrange_words_by_length(words)
+    
+    # Initialize a main list to store lists of words sorted by length.
+    main_word_list = []
+    sorted_word_list = []
+
+    # Starting point of the word length. A new list will be generated
+    # for each increase in wordlength.
+    base_word_length = len(sorted_words[0])
+    for word in sorted_words:
+        if len(word) == base_word_length:
+            sorted_word_list.append(word)
+        else:
+            main_word_list.append(sorted_word_list)
+            base_word_length += 1
+            sorted_word_list = []
+
+    # Loop through the list of lists.
+    for group in main_word_list:
+
+        # Continues if an empty list is encountered.
+        if not group:
+            continue
+        print("\n[+] Mask for {} letter words".format(len(group[0])))
+
+        # Generate the masks for each word and sort them by count.
+        masks = [generate_char_mask(word) for word in group]
         sorted_masks = sort_char_masks(masks)
+
+        # Output to terminal and file.
         if args.outfile:
-            with open('masks.txt', 'w') as outfile:
+            with open('masks.txt', 'a') as outfile:
                 for k, v in sorted_masks:
                     print("{} : {}".format(k, v))
                     outfile.write("{} : {}\n".format(k, v))
@@ -73,20 +111,21 @@ def main():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--filename",
-                        nargs='*',
-                        help="Specify a file containing the output of an nmap scan in xml format.")
+                        help="Specify a file containing plain text passwords.")
     parser.add_argument("-o", "--outfile",
                         action="store_true",
-                        help="Writes the output to a file in the current directory.")
+                        help="Writes the output to a file, masks.txt, in the current directory.")
     args = parser.parse_args()
 
     if not args.filename:
         parser.print_help()
-        print("\n[-] Please specify one or more password files to analyze. For multiple input files, separate with a space.\n")
+        print("\n[-] Please specify a password file to analyze.\n")
         exit()
-    for filename in args.filename:
-        if not os.path.exists(filename):
-            parser.print_help()
-            print("\n[-] The file {}, does not exist or you lack permissions to open it. Please try again.\n".format(filename))
-            exit()
+    filename = args.filename
+
+    if not os.path.exists(filename):
+        parser.print_help()
+        print("\n[-] The file {}, does not exist or you lack permissions to open it. Please try again.\n".format(filename))
+        exit()
+
     main()

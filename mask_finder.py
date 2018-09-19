@@ -133,30 +133,50 @@ def main():
 
     # Output to terminal and file.
     if args.outfile:
+
+        # Opens the outfile.
         with open(args.outfile, 'a') as outfile:
+            
+            # Records the files processed.
             outfile.write('Processed files:\n')
             for f in args.filename:
                 outfile.write(f + '\n')
+
+            # Stores the starting word length to control printing word length.
+            # Length is divided by 2 because the masks are measured, so they 
+            # include ? before each character.
             word_length = int(len(sorted_results[0][0]) / 2)
+
             print("\n[+] Mask for {} letter words".format(word_length))
             outfile.write("\n[+] Mask for {} letter words\n".format(word_length))
+
+            # Iterates through the results, checking the mask length to control
+            # the printed output
             for k, v in sorted_results:
                 new_word_length = int(len(k) / 2)
                 if new_word_length != word_length:
-                    print("\n[+] Mask for {} letter words".format(int(len(k) / 2)))
-                    outfile.write("\n[+] Mask for {} letter words\n".format(int(len(k) / 2)))
+                    print("\n[+] Mask for {} letter words".format(new_word_length))
+                    outfile.write("\n[+] Mask for {} letter words\n".format(new_word_length))
                     word_length = new_word_length
-                print("{} : {}".format(k, v))
-                outfile.write("{} : {}\n".format(k, v))
+                if args.charset:
+                    if all(char in k for char in args.charset.lower()):
+                        print("{} : {}".format(k, v))
+                        outfile.write("{} : {}\n".format(k, v))
+                else:
+                    print("{} : {}".format(k, v))
+                    outfile.write("{} : {}\n".format(k, v))
     else:
         word_length = int(len(sorted_results[0][0]) / 2)
         print("\n[+] Mask for {} letter words".format(word_length))
         for k, v in sorted_results:
             new_word_length = int(len(k) / 2)
             if new_word_length != word_length:
-                print("\n[+] Mask for {} letter words".format(int(len(k) / 2)))
+                print("\n[+] Mask for {} letter words".format(new_word_length))
                 word_length = new_word_length
-            if all(char in k for char in args.charset):
+            if args.charset:
+                if all(char in k for char in args.charset.lower()):
+                    print("{} : {}".format(k, v))
+            else:
                 print("{} : {}".format(k, v))
 
 

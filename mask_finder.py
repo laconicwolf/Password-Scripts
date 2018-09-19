@@ -26,7 +26,7 @@ def generate_char_mask(word):
                 mask += '?l'
             elif char in string.digits:
                 mask += '?d'
-            elif char in string.punctuation:
+            elif char in string.punctuation or char == ' ':
                 mask += '?s'
             else:
                 print('Encountered an non-standard character: {}. It will appear in a mask as ?X '.format(char))
@@ -38,7 +38,7 @@ def generate_char_mask(word):
                 mask += '?l'
             elif char in string.digits:
                 mask += '?d'
-            elif char in string.punctuation:
+            elif char in string.punctuation or char == ' ':
                 mask += '?s'
             else:
                 print('Encountered an non-standard character: {}. It will appear in a mask as ?X '.format(char))
@@ -47,12 +47,13 @@ def generate_char_mask(word):
 
 
 def sort_char_masks(mask_list):
-    """Returns a dictionary of character masks, where the mask is the key and the 
-    value is the number of times the mask occurs
+    """Returns a listed tuple of a character masks, where the mask is the first ([0]) element 
+    and the number of times the mask occurs is the second element ([1]). For example:
+    [('?l?l?l?l?l', 4)]
     """
     mask_dict = dict(Counter(mask_list))
-    sorted_mask_dict = [(k, mask_dict[k]) for k in sorted(mask_dict, key=mask_dict.get, reverse=True)]
-    return sorted_mask_dict
+    sorted_counted_mask = [(k, mask_dict[k]) for k in sorted(mask_dict, key=mask_dict.get, reverse=True)]
+    return sorted_counted_mask
 
 
 def arrange_words_by_length(list_of_words):
@@ -63,72 +64,138 @@ def arrange_words_by_length(list_of_words):
     return list_of_words
 
 
+def sort_dict_by_key_len(dict_obj):
+    """Takes a dictionary and returns a list of tuples sorted by the length of
+    the dictionary's keys.
+    """
+    return [(k, dict_obj[k]) for k in sorted(dict_obj, key=len)]
+
+
+def sort_tuple_list_by_two_elements(tuple_list):
+    """sorts a list of tuples that contain two values, first by the first value,
+    then by the second value. The -x[1] sorts in reverse.
+    #https://stackoverflow.com/questions/14466068/sort-a-list-of-tuples-by-second-value-reverse-true-and-then-by-key-reverse-fal
+    """
+    return sorted(tuple_list, key=lambda x: (len(x[0]), -x[1]))
+
+
 def main():
     """Reads in a plain-text password lists to find the frequency 
     of password character masks. Will display all character masks found.
     """
-    # Read the file into memory.
-    words = open(filename).read().splitlines()
+    # Initialize variable to hold a list of all sorted mask dictionaries for a file
+    file_mask_list = []
+    for filename in args.filename:
+        print("[*] Processing {}".format(filename))
+        # Read the file into memory.
+        words = open(filename).read().splitlines()
 
-    # Sort the words by length.
-    sorted_words = arrange_words_by_length(words)
+        # Sort the words by length.
+        sorted_words = arrange_words_by_length(words)
+        
+        # Initialize a list per file to store lists of words sorted by length.
+        file_word_list = []
+        sorted_word_list = []
+
+        # Probably can come back to the below code later and remove a lot of it.
+        # I don't need to sort by length at this point because I do it later.
+
+        # Starting point of the word length. A new list will be generated
+        # for each increase in wordlength.
+        base_word_length = len(sorted_words[0])
+        for word in sorted_words:
+            if len(word) == base_word_length:
+                sorted_word_list.append(word)
+            else:
+                file_word_list.append(sorted_word_list)
+                base_word_length += 1
+                sorted_word_list = []
+
+        # Loop through the list of lists.
+        for group in file_word_list:
+
+            # Continues if an empty list is encountered.
+            if not group:
+                continue
+
+            # Generate the masks for each word and sort them by count.
+            masks = [generate_char_mask(word) for word in group]
+            sorted_masks = sort_char_masks(masks)
+            file_mask_list.append(sorted_masks)
+
+    # Converts tuples to a dictionary to combine values of the same mask
+    # across the different input files
+    file_mask_list = [dict(l) for l in file_mask_list]
     
-    # Initialize a main list to store lists of words sorted by length.
-    main_word_list = []
-    sorted_word_list = []
+    # Gets all the unique masks from the input files
+    mask_keys = []
+    for mask_dictionary in file_mask_list:
+        dict_keys = list(mask_dictionary.keys())
+        for k in dict_keys:
+            mask_keys.append(k)
+    mask_keys = list(set(mask_keys))
+    
+    # Adds the number of occurences of mask from each input file
+    # by combining dictionary values of the same key
+    results = {}
+    for k in mask_keys:
+        sums = []
+        for item in file_mask_list:
+            if item.get(k):
+                sums.append(item.get(k))
+        results[k] = sum(sums)
 
-    # Starting point of the word length. A new list will be generated
-    # for each increase in wordlength.
-    base_word_length = len(sorted_words[0])
-    for word in sorted_words:
-        if len(word) == base_word_length:
-            sorted_word_list.append(word)
-        else:
-            main_word_list.append(sorted_word_list)
-            base_word_length += 1
-            sorted_word_list = []
+    # Sorts the result by mask length, converting it to a list of tuples
+    sorted_results = sort_dict_by_key_len(results)
 
-    # Loop through the list of lists.
-    for group in main_word_list:
+    # Sorts the tuples first by length, then by value
+    sorted_results = sort_tuple_list_by_two_elements(sorted_results)
 
-        # Continues if an empty list is encountered.
-        if not group:
-            continue
-        print("\n[+] Mask for {} letter words".format(len(group[0])))
-
-        # Generate the masks for each word and sort them by count.
-        masks = [generate_char_mask(word) for word in group]
-        sorted_masks = sort_char_masks(masks)
-
-        # Output to terminal and file.
-        if args.outfile:
-            with open('masks.txt', 'a') as outfile:
-                for k, v in sorted_masks:
-                    print("{} : {}".format(k, v))
-                    outfile.write("{} : {}\n".format(k, v))
-        else:
-            for k, v in sorted_masks:
+    # Output to terminal and file.
+    if args.outfile:
+        with open(args.outfile, 'a') as outfile:
+            outfile.write('Processed files:\n')
+            for f in args.filename:
+                outfile.write(f + '\n')
+            word_length = len(sorted_results[0][0])
+            print("\n[+] Mask for {} letter words".format(word_length))
+            outfile.write("\n[+] Mask for {} letter words\n".format(word_length))
+            for k, v in sorted_results:
+                new_word_length = len(k)
+                if new_word_length != word_length:
+                    print("\n[+] Mask for {} letter words".format(len(k)))
+                    outfile.write("\n[+] Mask for {} letter words\n".format(len(k)))
+                    word_length = new_word_length
                 print("{} : {}".format(k, v))
+                outfile.write("{} : {}\n".format(k, v))
+    else:
+        word_length = len(sorted_results[0][0])
+        print("\n[+] Mask for {} letter words".format(word_length))
+        for k, v in sorted_results:
+            new_word_length = len(k)
+            if new_word_length != word_length:
+                print("\n[+] Mask for {} letter words".format(len(k)))
+                word_length = new_word_length
+            print("{} : {}".format(k, v))
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--filename",
-                        help="Specify a file containing plain text passwords.")
+                        nargs='*',
+                        help="Specify a file containing the output of an nmap scan in xml format.")
     parser.add_argument("-o", "--outfile",
-                        action="store_true",
                         help="Writes the output to a file, masks.txt, in the current directory.")
     args = parser.parse_args()
 
     if not args.filename:
         parser.print_help()
-        print("\n[-] Please specify a password file to analyze.\n")
+        print("\n[-] Please specify one or more password files to analyze. For multiple input files, separate with a space.\n")
         exit()
-    filename = args.filename
-
-    if not os.path.exists(filename):
-        parser.print_help()
-        print("\n[-] The file {}, does not exist or you lack permissions to open it. Please try again.\n".format(filename))
-        exit()
+    for filename in args.filename:
+        if not os.path.exists(filename):
+            parser.print_help()
+            print("\n[-] The file {}, does not exist or you lack permissions to open it. Please try again.\n".format(filename))
+            exit()
 
     main()

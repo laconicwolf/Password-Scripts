@@ -1,5 +1,4 @@
 # Password Scripts
-## A collection of scripts for mangling and analysis:
 
 ### mask_finder.py
 > Analyzes a password list to find frequency of password character masks

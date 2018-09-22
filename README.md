@@ -9,3 +9,6 @@
 ### seclist_password_combiner.py
 > Combines, sorts, and uniques the passwords contained in files located at 
 https://github.com/danielmiessler/SecLists.
+
+### get_hcpot_passwords.py
+> Extracts the plain passwords from a hashcat pot file.

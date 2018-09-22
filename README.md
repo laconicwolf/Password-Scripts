@@ -12,3 +12,6 @@ https://github.com/danielmiessler/SecLists.
 
 ### get_hcpot_passwords.py
 > Extracts the plain passwords from a hashcat pot file.
+
+### md5_hashgen.py
+> Reads a plain password file, MD5s each password, and writes the hashes to a new file.

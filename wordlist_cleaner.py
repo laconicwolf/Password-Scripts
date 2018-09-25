@@ -48,7 +48,8 @@ if __name__ == '__main__':
         if not os.path.exists(file):
             print("\n[-] The file cannot be found or you do not have permission to open the file. Please check the path and try again\n")
             exit()
+        print('[*] Reading file: {}'.format(file))
         with open(file, encoding="utf8", errors='ignore') as fh:
             words = fh.read().splitlines()
 
-    main()
+main()

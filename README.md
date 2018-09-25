@@ -9,8 +9,8 @@
 ### seclist_password_combiner.py
 > Combines, sorts, and uniques the passwords contained in files located at https://github.com/danielmiessler/SecLists.
 
-### get_hcpot_passwords.py
-> Extracts the plain passwords from a hashcat pot file.
+### get_pot_passwords.py
+> Extracts the plain passwords from a hashcat or jtr pot file.
 
 ### md5_hashgen.py
 > Reads a plain password file, MD5s each password, and writes the hashes to a new file.

@@ -20,6 +20,7 @@ def main():
     print('[*] Changing all words to lowercase...')
     words = [word.lower() for word in words]
     if args.index:
+        print('[*] Capitalizing letters at specified indexes...')
         capitalized_words = []
         for word in words:
             if not word: continue
@@ -31,8 +32,10 @@ def main():
                     continue
             capitalized_words.append(''.join(list_word))
     else:
+        print('[*] Capitalizing first letter of each word...')
         capitalized_words = [word.title() for word in words]
     if args.outfile:
+        print('[*] Writing to {}...'.format(args.outfile))
         with open(args.outfile, 'w', encoding="utf8", errors='ignore') as fh:
             for word in capitalized_words:
                 fh.write(word + '\n')

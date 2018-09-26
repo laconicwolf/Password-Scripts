@@ -22,7 +22,7 @@
 > Reads a file, converts to lowercase, strips everything but lowercase letters, writes to new file.
 
 ### leet_gen.py
-> Reads a string or file, and creates a ridiculous amount of permutations using leet subsitutions. This will produce a LOT of output pure word.
+> Reads a string or file, and creates a ridiculous amount of permutations using leet subsitutions. This will produce a LOT of output per word.
 
 ### capitalize_letters.py
 > Reads a file and capitalizes letters specified by index. If no index provided, will capitalize the first letter.

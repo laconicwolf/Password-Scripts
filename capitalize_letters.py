@@ -17,6 +17,8 @@ def main():
     with open(filename, encoding="utf8", errors='ignore') as fh:
         words = fh.read().splitlines()
     print('[*] Processing {} words...'.format(len(words)))
+    print('[*] Changing all words to lowercase...')
+    words = [word.lower() for word in words]
     if args.index:
         capitalized_words = []
         for word in words:

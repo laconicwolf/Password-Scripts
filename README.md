@@ -26,3 +26,6 @@
 
 ### capitalize_letters.py
 > Reads a file and capitalizes letters specified by index. If no index provided, will capitalize the first letter.
+
+### wordlist_searcher.py
+> Searches a dictionary to see if a word exists. You can search for a single word, multiple words, or a words in a file.

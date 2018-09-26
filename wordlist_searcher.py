@@ -21,9 +21,24 @@ def main():
     dict_file.close()
     print('[*] Searching...')
     words = [word.lower() for word in words]
+    unique_words = []
     for word in words:
         if not dict_words.get(word):
-            print("[*] {} does not appear in {}".format(word, filename))
+            unique_words.append(word)
+    if unique_words:
+        if args.outfile:
+            print("[*] Writing words that do not appear in {} to {}...".format(filename, args.outfile))
+            with open(args.outfile, 'w', encoding="utf8", errors='ignore') as fh:
+                for word in unique_words:
+                    fh.write(word + '\n')
+        else:
+            for word in unique_words:
+                print("[*] {} does not appear in {}".format(word, filename))
+    else:
+        print("[*] All words from {} appeared in {}".format(args.wordlist, filename))
+    #for word in words:
+        #if not dict_words.get(word):
+            #print("[*] {} does not appear in {}".format(word, filename))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -34,6 +49,8 @@ if __name__ == '__main__':
                         help="Specify the word or words you'd like to search for.")
     parser.add_argument('-wl', '--wordlist',
                         help="Specify the filename containing the list of words you'd like to search for.")
+    parser.add_argument("-o", "--outfile",
+                        help="Writes the output to a specified file.")
     args = parser.parse_args() 
     if not args.dictionary:
         parser.print_help()

@@ -17,10 +17,10 @@ def main():
     print('[*] Reading dictionary file: {}'.format(filename))
     dict_file =  open(filename, encoding="utf8", errors='ignore')
     for line in dict_file.read().split('\n'):
-        dict_words[line.lower()] = True
+        dict_words[line] = True
     dict_file.close()
     print('[*] Searching...')
-    words = [word.lower() for word in words]
+    words = [word for word in words]
     unique_words = []
     for word in words:
         if not dict_words.get(word):

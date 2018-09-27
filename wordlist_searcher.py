@@ -36,9 +36,7 @@ def main():
                 print("[*] {} does not appear in {}".format(word, filename))
     else:
         print("[*] All words from {} appeared in {}".format(args.wordlist, filename))
-    #for word in words:
-        #if not dict_words.get(word):
-            #print("[*] {} does not appear in {}".format(word, filename))
+        
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

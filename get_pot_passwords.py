@@ -12,7 +12,8 @@ import argparse
 
 def decode_hashcat_hexstring(hexstring):
     """Parses a hex encoded password string ($HEX[476f6f646669676874343a37])
-    and returns the decodes the hex."""
+    and returns the decodes the hex.
+    """
     index_1 = hexstring.index("[")+1
     index_2 = len(hexstring)-1
     hexdata = hexstring[index_1:index_2]
@@ -23,7 +24,8 @@ def decode_hashcat_hex(data):
     """Calls the decoded_hashcat_hexstring on an encoded hex represented password
     ($HEX[476f6f646669676874343a37]). Occasionally the string will be encoded
     multiple times, so a loop is used until the $HEX prefix no longer remains.
-    Returns the decodes the hexstring."""
+    Returns the decodes the hexstring.
+    """
     while data.startswith('$HEX['):
         data = decode_hashcat_hexstring(data)
     return data
@@ -46,7 +48,7 @@ def main():
             else:
                 fixed_passwords.append(''.join(line))
     except IndexError as e:
-        print('Error detected! Check the line where the error occurred?')
+        print('Error detected:')
         print(e)
     passwords = []
     for password in fixed_passwords:

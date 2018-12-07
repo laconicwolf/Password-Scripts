@@ -29,3 +29,6 @@
 
 ### wordlist_searcher.py
 > Searches a dictionary to see if a word exists. You can search for a single word, multiple words, or a words in a file.
+
+### pot.py
+> Combines get_pot_passwords.py with wordlist_cleaner.py.

@@ -20,9 +20,9 @@ def combine_words(wordlists):
     d1 = wordlists[0]
     d2 = wordlists[1] 
     for h in range(len(d1)):
-        w1 = d1[h]
+        w1 = d1[h].title() if args.title_case else d1[h]
         for i in range(len(d2)):
-            w2 = d2[i]
+            w2 = d2[i].title() if args.title_case else d2[i]
             combined_words.append(w1 + w2)
     return combined_words
 
@@ -44,6 +44,9 @@ if __name__ == '__main__':
                         help="Specify a file or files containing words.")
     parser.add_argument("-o", "--outfile",
                         help="Writes the output to a specified file.")
+    parser.add_argument("-t", "--title_case",
+                        action="store_true",
+                        help="Capitalizes the first letter and lowercases the remaining letters of a word.")
     args = parser.parse_args()
     if not args.dictionaries:
         parser.print_help()

@@ -7,13 +7,6 @@ __description__ = """Combines two wordlists."""
 
 import os
 import argparse
-from collections import OrderedDict
-
-def create_separate_wordlists(word_dict):
-    separate_wordlists = []
-    for key, value in word_dict.items():
-        separate_wordlists.append(value)
-    return separate_wordlists
 
 def combine_words(wordlists):
     combined_words = []
@@ -27,7 +20,6 @@ def combine_words(wordlists):
     return combined_words
 
 def main():
-    wordlists = create_separate_wordlists(dictionaries)
     combined_words = combine_words(wordlists)
     if args.outfile:
         with open(args.outfile, 'w', encoding="utf8", errors='ignore') as fh:
@@ -56,12 +48,12 @@ if __name__ == '__main__':
         parser.print_help()
         print("\n[-] You must specify 2 dictionaries (-d dict1.txt dict2.txt). No more, no less.\n")
         exit()
-    dictionaries = OrderedDict()
+    wordlists = []
     for file in args.dictionaries:
         if not os.path.exists(file):
-            print("\n[-] The file cannot be found or you do not have permission to open the file. Please check the path and try again\n")
+            print("\n[-] The file {} cannot be found or you do not have permission to open the file. Please check the path and try again\n".format(file))
             exit()
         with open(file, encoding="utf8", errors='ignore') as fh:
             words = fh.read().splitlines()
-            dictionaries[file] = words
+            wordlists.append(words)
     main()

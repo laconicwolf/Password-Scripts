@@ -32,3 +32,12 @@
 
 ### pot.py
 > Combines get_pot_passwords.py with wordlist_cleaner.py.
+
+### combinator2.py
+> Combines two dictionaries. Can also title-case each word.
+
+### combinator3.py
+> Combines three dictionaries. Can also title-case each word.
+
+### combinator4.py
+> Combines four dictionaries. Can also title-case each word.

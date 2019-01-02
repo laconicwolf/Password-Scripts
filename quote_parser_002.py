@@ -13,7 +13,7 @@ contents = requests.get(url).text
 
 lines = [l.split('\t')[1] for l in contents]
 
-with open('short_quotes.txt', 'w') as fh:
+with open('short_quotes.txt', 'a') as fh:
     s_lines = [l for l in lines if len(l) < 33]
     for line in s_lines:
         print(line.lower())
@@ -21,7 +21,7 @@ with open('short_quotes.txt', 'w') as fh:
 
 print('[*] File written to short_quotes.txt!')
 
-with open('medium_quotes.txt', 'w') as fh:
+with open('medium_quotes.txt', 'a') as fh:
     m_lines = [l for l in lines if len(l) > 32 and len(l) < 128]
     for line in m_lines:
         print(line.lower())
@@ -29,7 +29,7 @@ with open('medium_quotes.txt', 'w') as fh:
 
 print('[*] File written to medium_quotes.txt!')
 
-with open('long_quotes.txt', 'w') as fh:
+with open('long_quotes.txt', 'a') as fh:
     l_lines = [l for l in lines if len(l) < 127]
     for line in l_lines:
         print(line.lower())

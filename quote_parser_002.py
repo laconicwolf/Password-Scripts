@@ -16,7 +16,6 @@ for line in contents:
     try:
         lines.append(line.split('\t')[1])
     except IndexError:
-        input(line)
         continue
 
 

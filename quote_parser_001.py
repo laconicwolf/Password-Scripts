@@ -7,11 +7,19 @@ __description__ = """Retrieves data listed at https://gist.githubusercontent.com
 parses, and writes to a file."""
 
 import requests
+import ast
 
 url = "https://gist.githubusercontent.com/signed0/d70780518341e1396e11/raw/2a7f4af8d181a714f9d49105ed57fafb3f450960/quotes.json"
 contents = requests.get(url).text.split('\n')
 
-lines = [l[0] for l in contents]
+lines = []
+for line in contents:
+    try:
+        line = ast.literal_eval(line)
+    except SyntaxError:
+        input(line)
+        continue
+    lines.append(line[0])
 
 with open('short_quotes.txt', 'a') as fh:
     s_lines = [l for l in lines if len(l) < 33]

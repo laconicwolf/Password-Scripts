@@ -9,9 +9,16 @@ parses, and writes to three files."""
 import requests
 
 url = "https://raw.githubusercontent.com/alvations/Quotables/master/author-quote.txt"
-contents = requests.get(url).text
+contents = requests.get(url).text.split('\n')
 
-lines = [l.split('\t')[1] for l in contents]
+lines = []
+for line in contents:
+    try:
+        lines.append(line.split('\t')[1])
+    except IndexError:
+        input(line)
+        continue
+
 
 with open('short_quotes.txt', 'a') as fh:
     s_lines = [l for l in lines if len(l) < 33]

@@ -60,7 +60,7 @@ def create_2_dig_year_month_day():
 def create_4_dig_year_month_day():
     """Returns a list of from 19000101-20991231."""
     year_month_day = []
-    times = pd.date_range('01-01-1900', '12-31-2099')
+    times = pd.date_range('01-01-1970', '12-31-2099')
     for time in times:
         year_month_day.append(str(time).split(' ')[0].replace('-', ''))
     return year_month_day
@@ -92,9 +92,32 @@ def main():
     # Write to rule file
     with open('dates_rule.rule', 'w') as fh:
         for date in all_dates:
+        	# Dates only
             fh.write('${}\n'.format('$'.join(list(date))))
+
+            # Capitalizes first letter then dates
+            fh.write('c${}\n'.format('$'.join(list(date))))
+
+            # Capitalizes first letter, doubles, then dates
+            fh.write('cd${}\n'.format('$'.join(list(date))))
+
+            # Doubles, dates, then capitalizes first letter
+            fh.write('d${}c\n'.format('$'.join(list(date))))
+
             for item in special_chars:
+            	# Writes dates with special chars
                 fh.write('${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
+
+                # Writes dates with special chars
+                fh.write('c${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
+
+                # Capitalizes first letter, doubles, then dates with specials
+                fh.write('cd${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
+
+                # Doubles, dates and specials, then capitalizes first letter
+                fh.write('d${}${}c\n'.format('$'.join(list(date)), '$'.join(list(item))))
+
+
 
 if __name__ == '__main__':
     main()

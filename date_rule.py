@@ -72,7 +72,7 @@ def create_4_dig_year_month_day(start_year, end_year):
     return year_month_day
 
 def main():
-	print("[*] Generating dates...")
+    print("[*] Generating dates...")
 
     # 00-99
     two_dig_year = create_2_digit_year()

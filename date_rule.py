@@ -112,25 +112,44 @@ def main():
             	# Doubles, dates, then capitalizes first letter
                 fh.write('d${}c\n'.format('$'.join(list(date))))
 
-            if not special_chars: continue
-            for item in special_chars:
-                # Writes dates with special chars
+            if not appensions or not prepensions: continue
+            for item in appensions:
+                # Writes dates with items
                 fh.write('${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
 
                 if args.title:
-                    # Capitalizes, dates, and writes with special chars
+                    # Capitalizes, dates, and writes with items
                     fh.write('c${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
 
                 if args.double:
-                    # Capitalizes first letter, doubles, then dates with specials
+                    # Capitalizes first letter, doubles, then dates with items
                     fh.write('cd${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
 
                 if args.title and args.double:
-                    # Capitalizes first letter, then doubles, dates and specials
+                    # Capitalizes first letter, then doubles, dates and items
                     fh.write('cd${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
 
-                    # Doubles, dates and specials, then capitalizes first letter
+                    # Doubles, dates and items, then capitalizes first letter
                     fh.write('d${}${}c\n'.format('$'.join(list(date)), '$'.join(list(item))))
+
+            for item in prepensions:
+                # Writes items with dates
+                fh.write('^{}${}\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
+
+                if args.title:
+                    # Capitalizes, dates, and writes with items
+                    fh.write('c^{}${}\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
+
+                if args.double:
+                    # Capitalizes first letter, doubles, then dates with items
+                    fh.write('cd^{}${}\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
+
+                if args.title and args.double:
+                    # Capitalizes first letter, then doubles, dates and items
+                    fh.write('cd^{}${}\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
+
+                    # Doubles, dates and items, then capitalizes first letter
+                    fh.write('d^{}${}c\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
 
     print("[+] Complete! Rule file written to {}".format(filename))
 
@@ -142,9 +161,12 @@ if __name__ == '__main__':
     parser.add_argument("-t", "--title",
                         help="title case word",
                         action="store_true")
-    parser.add_argument("-a", "--append_chars",
+    parser.add_argument("-a", "--append",
                         nargs="*",
-                        help="Specify characters to add to end of dates, separated by spaces. (-a ! !! !!! !@#$")
+                        help="Specify characters or words to add to end of dates, separated by spaces. (-a ! !! !!! !@#$")
+    parser.add_argument("-p", "--prepend",
+                        nargs="*",
+                        help="Specify characters or words to add to the beginning of the word, separated by spaces. (-p ! !! !!! !@#$")
     parser.add_argument("-s", "--start_year",
                         help="Specify 4 digit year as a starting date range. Default is 1970.")
     parser.add_argument("-e", "--end_year",
@@ -161,8 +183,10 @@ if __name__ == '__main__':
     	if not args.end_year.isdigit() or len(args.end_year) != 4:
     		print('[-] End year must be a 4 digit year (-e 2019). Default is current year + 1')
     		exit()
+
     end_year = args.end_year if args.end_year else str(time.localtime().tm_year + 1)
-    special_chars = args.append_chars if args.append_chars else None
+    appensions = args.append if args.append else None
+    prepensions = args.prepend if args.prepend else None
     filename = args.filename if args.filename else 'date_rule.rule'
 
     main()

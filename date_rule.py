@@ -9,11 +9,11 @@ map to dates in popular formats that may be appended to files."""
 import argparse
 import time
 try:
-	import pandas as pd
-	import numpy as np
+    import pandas as pd
+    import numpy as np
 except ImportError:
-	print("This script requires Pandas and Numpy. Try 'pip install pandas', or 'python -m pip install pandas', or do an Internet search for installation instructions.")
-	exit()
+    print("This script requires Pandas and Numpy. Try 'pip install pandas', or 'python -m pip install pandas', or do an Internet search for installation instructions.")
+    exit()
 
 def create_2_digit_year():
     """Returns a list of strings from 00-99."""

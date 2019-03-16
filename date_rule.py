@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 __author__ = 'Jake Miller (@LaconicWolf)'
 __date__ = '20190316'
@@ -6,10 +6,14 @@ __version__ = '0.01'
 __description__ = """Creates a rule file that will append digits that may 
 map to dates in popular formats that may be appended to files."""
 
-import pandas as pd
-import numpy as np
 import argparse
 import time
+try:
+	import pandas as pd
+	import numpy as np
+except ImportError:
+	print("This script requires Pandas and Numpy. Try 'pip install pandas', or 'python -m pip install pandas', or do an Internet search for installation instructions.")
+	exit()
 
 def create_2_digit_year():
     """Returns a list of strings from 00-99."""
@@ -68,6 +72,8 @@ def create_4_dig_year_month_day(start_year, end_year):
     return year_month_day
 
 def main():
+	print("[*] Generating dates...")
+
     # 00-99
     two_dig_year = create_2_digit_year()
 
@@ -91,7 +97,8 @@ def main():
     all_dates = set(list(all_dates))
 
     # Write to rule file
-    with open('dates_rule.rule', 'w') as fh:
+    print("[*] Writing rules...")
+    with open(filename, 'w') as fh:
         for date in all_dates:
         	# Dates only
             fh.write('${}\n'.format('$'.join(list(date))))
@@ -118,6 +125,7 @@ def main():
 
                 # Doubles, dates and specials, then capitalizes first letter
                 fh.write('d${}${}c\n'.format('$'.join(list(date)), '$'.join(list(item))))
+    print("[+] Complete! Rule file written to {}".format(filename))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -131,6 +139,8 @@ if __name__ == '__main__':
                         help="Specify 4 digit year as a starting date range. Default is 1970.")
     parser.add_argument("-e", "--end_year",
                         help="Specify 4 digit year as a starting date range. Default is current year + 1.")
+    parser.add_argument("-f", "--filename",
+                        help="Specify a filename to write to. Default is date_rule.rule")
     args = parser.parse_args()
     if args.start_year:
     	if not args.start_year.isdigit() or len(args.start_year) != 4:
@@ -143,5 +153,6 @@ if __name__ == '__main__':
     		exit()
     end_year = args.end_year if args.end_year else str(time.localtime().tm_year + 1)
     special_chars = args.append_chars if args.append_chars else None
+    filename = args.filename if args.filename else 'date_rule.rule'
 
     main()

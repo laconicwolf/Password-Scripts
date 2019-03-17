@@ -4,15 +4,16 @@ __author__ = 'Jake Miller (@LaconicWolf)'
 __date__ = '20190316'
 __version__ = '0.01'
 __description__ = """Creates a rule file that will append digits that may 
-map to dates in popular formats that may be appended to files."""
+map to dates in popular formats that may be appended to files. You can also
+append or prepend characters or words, capitalize the first character of the 
+words, and double the word. Dates are currently MDY, but can be DMY or YMD"""
 
 import argparse
 import time
 try:
     import pandas as pd
-    import numpy as np
 except ImportError:
-    print("This script requires Pandas and Numpy. Try 'pip install pandas', or 'python -m pip install pandas', or do an Internet search for installation instructions.")
+    print("This script requires Pandas. Try 'pip install pandas', or 'python -m pip install pandas', or do an Internet search for installation instructions.")
     exit()
 
 def create_2_digit_year():

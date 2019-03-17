@@ -145,7 +145,7 @@ def main():
         all_dates += two_dig_year_month_day 
         all_dates += four_dig_year_month_day
 
-    if date_time_format == 'MDY':
+    if date_time_format == 'DMY':
         all_dates += month_day
         all_dates += two_dig_year_month_day 
         all_dates += four_dig_year_month_day

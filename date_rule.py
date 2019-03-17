@@ -53,6 +53,38 @@ def create_month_day_4_dig_year(start_year, end_year):
         month_day_year.append(month_day + year)
     return list(set(month_day_year))
 
+def create_day_month(start_year, end_year):
+    """Returns a list of from 0101-3112."""
+    day_month_list = []
+    times = pd.date_range('01-01-{}'.format(start_year), '12-31-{}'.format(end_year))
+    for time in times:
+        day = str(time).split(' ')[0].split('-')[2]
+        month = str(time).split(' ')[0].split('-')[1]
+        day_month_list.append(day + month)
+    return list(set(day_month_list))
+
+def create_day_month_2_dig_year(start_year, end_year):
+    """Returns a list of from 010100-311299."""
+    day_month_year = []
+    times = pd.date_range('01-01-{}'.format(start_year), '12-31-{}'.format(end_year))
+    for time in times:
+        day = str(time).split(' ')[0].split('-')[2]
+        month = str(time).split(' ')[0].split('-')[1]
+        year = str(time).split('-')[0][-2:]
+        day_month_year.append(day + month + year)
+    return list(set(day_month_year))
+
+def create_day_month_4_dig_year(start_year, end_year):
+    """Returns a list of from 01011900-31122099."""
+    day_month_year = []
+    times = pd.date_range('01-01-{}'.format(start_year), '12-31-{}'.format(end_year))
+    for time in times:
+        day = str(time).split(' ')[0].split('-')[2]
+        month = str(time).split(' ')[0].split('-')[1]
+        year = str(time).split('-')[0]
+        day_month_year.append(day + month + year)
+    return list(set(day_month_year))
+
 def create_2_dig_year_month_day(start_year, end_year):
     """Returns a list of from 000101-991231."""
     year_month_day = []
@@ -86,13 +118,36 @@ def main():
     # 01011900-12312099
     month_day_4_dig_year = create_month_day_4_dig_year(start_year, end_year)
 
+    # 0101-3112
+    day_month = create_day_month(start_year, end_year)
+
+    # 010100-311299
+    day_month_2_dig_year = create_day_month_2_dig_year(start_year, end_year)
+
+    # 01011900-31122099
+    day_month_4_dig_year = create_day_month_4_dig_year(start_year, end_year)
+
     # 000101-991231
     two_dig_year_month_day = create_2_dig_year_month_day(start_year, end_year)
 
     # 19000101-20991231
     four_dig_year_month_day = create_4_dig_year_month_day(start_year, end_year)
 
-    all_dates = two_dig_year + month_day + month_day_2_dig_year + month_day_4_dig_year + two_dig_year_month_day + four_dig_year_month_day
+    all_dates = two_dig_year 
+    if date_time_format == 'MDY':
+        all_dates += month_day 
+        all_dates += month_day_2_dig_year 
+        all_dates += month_day_4_dig_year 
+
+    if date_time_format == 'YMD':
+        all_dates += month_day
+        all_dates += two_dig_year_month_day 
+        all_dates += four_dig_year_month_day
+
+    if date_time_format == 'MDY':
+        all_dates += month_day
+        all_dates += two_dig_year_month_day 
+        all_dates += four_dig_year_month_day
 
     # Write to rule file
     print("[*] Writing rules...")
@@ -155,6 +210,12 @@ def main():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--format",
+                        nargs='?',
+                        const='MDY',
+                        default='MDY',
+                        choices=['DMY', 'MDY', 'YMD'],
+                        help="Choose date/time format. Default MDY")
     parser.add_argument("-d", "--double",
                         help="Double word before appending date",
                         action="store_true")
@@ -184,6 +245,7 @@ if __name__ == '__main__':
     		print('[-] End year must be a 4 digit year (-e 2019). Default is current year + 1')
     		exit()
 
+    date_time_format = args.format
     end_year = args.end_year if args.end_year else str(time.localtime().tm_year + 1)
     appensions = args.append if args.append else None
     prepensions = args.prepend if args.prepend else None

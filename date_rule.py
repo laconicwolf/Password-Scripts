@@ -168,44 +168,45 @@ def main():
             	# Doubles, dates, then capitalizes first letter
                 fh.write('d${}c\n'.format('$'.join(list(date))))
 
-            if not appensions and not prepensions: continue
-            for item in appensions:
-                # Writes dates with items
-                fh.write('${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
+            if appensions:
+                for item in appensions:
+                    # Writes dates with items
+                    fh.write('${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
 
-                if args.title:
-                    # Capitalizes, dates, and writes with items
-                    fh.write('c${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
+                    if args.title:
+                        # Capitalizes, dates, and writes with items
+                        fh.write('c${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
 
-                if args.double:
-                    # Capitalizes first letter, doubles, then dates with items
-                    fh.write('cd${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
+                    if args.double:
+                        # Capitalizes first letter, doubles, then dates with items
+                        fh.write('cd${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
 
-                if args.title and args.double:
-                    # Capitalizes first letter, then doubles, dates and items
-                    fh.write('cd${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
+                    if args.title and args.double:
+                        # Capitalizes first letter, then doubles, dates and items
+                        fh.write('cd${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))
 
-                    # Doubles, dates and items, then capitalizes first letter
-                    fh.write('d${}${}c\n'.format('$'.join(list(date)), '$'.join(list(item))))
+                        # Doubles, dates and items, then capitalizes first letter
+                        fh.write('d${}${}c\n'.format('$'.join(list(date)), '$'.join(list(item))))
 
-            for item in prepensions:
-                # Writes items with dates
-                fh.write('^{}${}\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
+            if prepensions:
+                for item in appensions:
+                    # Writes items with dates
+                    fh.write('^{}${}\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
 
-                if args.title:
-                    # Capitalizes, dates, and writes with items
-                    fh.write('c^{}${}\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
+                    if args.title:
+                        # Capitalizes, dates, and writes with items
+                        fh.write('c^{}${}\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
 
-                if args.double:
-                    # Capitalizes first letter, doubles, then dates with items
-                    fh.write('cd^{}${}\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
+                    if args.double:
+                        # Capitalizes first letter, doubles, then dates with items
+                        fh.write('cd^{}${}\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
 
-                if args.title and args.double:
-                    # Capitalizes first letter, then doubles, dates and items
-                    fh.write('cd^{}${}\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
+                    if args.title and args.double:
+                        # Capitalizes first letter, then doubles, dates and items
+                        fh.write('cd^{}${}\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
 
-                    # Doubles, dates and items, then capitalizes first letter
-                    fh.write('d^{}${}c\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
+                        # Doubles, dates and items, then capitalizes first letter
+                        fh.write('d^{}${}c\n'.format('^'.join(list(item)[::-1]), '$'.join(list(date)) ))
 
     print("[+] Complete! Rule file written to {}".format(filename))
 

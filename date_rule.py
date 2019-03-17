@@ -168,7 +168,7 @@ def main():
             	# Doubles, dates, then capitalizes first letter
                 fh.write('d${}c\n'.format('$'.join(list(date))))
 
-            if not appensions or not prepensions: continue
+            if not appensions and not prepensions: continue
             for item in appensions:
                 # Writes dates with items
                 fh.write('${}${}\n'.format('$'.join(list(date)), '$'.join(list(item))))

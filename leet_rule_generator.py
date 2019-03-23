@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 __author__ = 'Jake Miller (@LaconicWolf). Inspired by work from Adam Willard (@aswsec)'
-__date__ = '20180924'
+__date__ = '20190323'
 __version__ = '0.01'
 __description__ = """Generates leet word rules"""
 
